@@ -20,6 +20,10 @@ int NexNumberSetValue(int Number,int value);
 
 int NexNumberGetValue(int Number);
 
+int NexXfloatSetValue(int Number, int value);
+
+int NexPictureSetPic(int pic, int value);
+
 int NexButtonGetText(int Button, char *buffer, int len);
 
 int NexButtonSetText(int Button, const char *buffer);
@@ -38,7 +42,7 @@ int NexDSButtonSetText(int DSButton,const char *buffer);
 
 int NexGaugeGetValue(int Gauge);
 
-int  NexGaugeSetValue(int Gauge,int value);
+int NexGaugeSetValue(int Gauge,int value);
 
 int NexProgressBarGetValue(int ProgressBar);
 
@@ -46,7 +50,7 @@ int NexProgressBarSetValue(int ProgressBar,int value);
 
 int NexRadioGetValue(int Radio);
 
-int  NexRadioSetValue(int Radio,int value);
+int NexRadioSetValue(int Radio,int value);
 
 int NexVariableGetValue(int Variable);
 

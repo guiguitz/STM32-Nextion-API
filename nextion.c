@@ -31,8 +31,8 @@ void sendCommand(const char* cmd)
       huart3.Instance->DR;
    }
 
-   HAL_UART_Transmit (&huart3, (uint8_t*) cmd, strlen (cmd), 100);
-   HAL_UART_Transmit (&huart3, (uint8_t*)&ENDTERMS, 3, 100);
+   HAL_UART_Transmit (&huart3, (uint8_t*) cmd, strlen (cmd), 50);
+   HAL_UART_Transmit (&huart3, (uint8_t*)&ENDTERMS, 3, 50);
 }
 
 int recvRetCommandFinished(void)
@@ -42,7 +42,7 @@ int recvRetCommandFinished(void)
    uint8_t temp[4]={0};
    HAL_UART_Receive (&huart3, (uint8_t*)&temp, 4, 100);
 
-   if (temp[0] == NEX_RET_CMD_FINISHED && temp[1]==0xFF && temp[2]==0xFF&& temp[3]==0xFF )
+   if (temp[0] == NEX_RET_CMD_FINISHED && temp[1]==0xFF && temp[2]==0xFF && temp[3]==0xFF)
    {
       ret=1;
    }
@@ -54,7 +54,7 @@ int recvRetNumber(void)
 {
    int number=0;
    uint8_t temp[8]={0};
-   HAL_UART_Receive (&huart3, (uint8_t*)&temp, 8, 100);
+   HAL_UART_Receive (&huart3, (uint8_t*)&temp, 8, 50);
 
    if (temp[0] == NEX_RET_NUMBER_HEAD && temp[5]==0xFF && temp[6]==0xFF && temp[7]==0xFF )
    {
@@ -73,7 +73,7 @@ int recvRetString(char* buffer,int len)
    char temp2[20]={0};
    int pointer=0, i=0;
    uint8_t c=0;
-   HAL_UART_Receive (&huart3, (uint8_t*)&temp2, len+4, 100);
+   HAL_UART_Receive (&huart3, (uint8_t*)&temp2, len+4, 50);
    for (i=0; i<len+4;  i++)
    {
       c=temp2[i];
@@ -142,7 +142,7 @@ int NexTextGetText( int Number ,char* buffer, int len  )
    return recvRetString (buffer, len);
 }
 
-int NexNumberSetValue(int Number,int value)
+int NexNumberSetValue(int Number, int value)
 {
    char cmd[15]={0};
    sprintf (cmd, "n%d.val=%d", Number, value) ;
@@ -156,6 +156,22 @@ int NexNumberGetValue(int Number)
    sprintf (cmd, "get n%d.val", Number);
    sendCommand (cmd);
    return recvRetNumber ();
+}
+
+int NexXfloatSetValue(int Number, int value)
+{
+   char cmd[15]={0};
+   sprintf (cmd, "x%d.val=%d", Number, value) ;
+   sendCommand (cmd);
+   return recvRetCommandFinished ();
+}
+
+int NexPictureSetPic(int pic, int value)
+{
+   char cmd[15]={0};
+   sprintf (cmd, "p%d.pic=%d", pic, value);
+   sendCommand (cmd);
+   return recvRetCommandFinished ();
 }
 
 int NexButtonGetText(int Button, char *buffer, int len)
